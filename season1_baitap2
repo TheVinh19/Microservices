@@ -1,0 +1,31 @@
+# BÀI TẬP 2: CÂN NHẮC BÀI TOÁN ĐÁNH ĐỔI VỚI MICROSERVICES
+
+## 1. Bản chất "Không có bữa trưa nào miễn phí" (No Free Lunch)
+Trong kiến trúc phần mềm, không có một mô hình nào là hoàn hảo cho mọi bài toán. Việc một doanh nghiệp muốn "đập đi xây lại" toàn bộ hệ thống Monolith (Nguyên khối) cũ để chuyển sang Microservices chỉ vì nó đang "hot" là một quyết định cực kỳ mạo hiểm. Microservices mang lại sự linh hoạt lớn, nhưng cái giá phải trả về chi phí vận hành, nhân sự và độ phức tạp kỹ thuật là không hề nhỏ.
+
+---
+
+## 2. Bảng so sánh chi tiết giữa Monolith và Microservices
+
+| Tiêu chí phân tích | Kiến trúc Nguyên khối (Monolith) | Kiến trúc Vi dịch vụ (Microservices) |
+| :--- | :--- | :--- |
+| **Tốc độ triển khai ban đầu** | **Nhanh**: Toàn bộ code nằm chung một chỗ, dễ build và deploy lên một server duy nhất. | **Chậm**: Cần thiết lập hạ tầng, kết nối mạng, CI/CD riêng cho từng dịch vụ nhỏ. |
+| **Khả năng mở rộng (Scalability)** | **Kém**: Khi một tính năng bị nghẽn (ví dụ: xử lý thanh toán), phải nhân bản (scale) toàn bộ hệ thống lên, gây lãng phí tài nguyên. | **Tốt**: Tính năng nào bị nghẽn thì chỉ cần mở rộng riêng dịch vụ đó (ví dụ: chỉ scale dịch vụ Thanh toán). |
+| **Độ độc lập công nghệ** | **Bị giới hạn**: Toàn bộ dự án phải dùng chung một ngôn ngữ lập trình và framework (ví dụ: cùng dùng Java). | **Linh hoạt**: Mỗi dịch vụ có thể dùng ngôn ngữ khác nhau tùy nhu cầu (ví dụ: Service A dùng Java, Service B dùng Python để làm AI). |
+| **Quản lý dữ liệu** | **Dễ dàng**: Dùng chung một cơ sở dữ liệu duy nhất, đảm bảo tính nhất quán (ACID) cực kỳ tốt. | **Rất phức tạp**: Mỗi dịch vụ giữ một DB riêng (Database-per-service). Khó đảm bảo tính nhất quán dữ liệu giữa các dịch vụ. |
+| **Độ trễ và hiệu năng** | **Thấp (Nhanh)**: Các hàm gọi trực tiếp lẫn nhau trong bộ nhớ (In-memory calls). | **Cao (Chậm hơn)**: Các dịch vụ phải giao tiếp với nhau qua môi trường mạng (HTTP/REST, gRPC, Message Queue) nên bị ảnh hưởng bởi độ trễ mạng. |
+| **Vận hành & Giám sát (DevOps)** | **Đơn giản**: Chỉ cần theo dõi trạng thái hoạt động của một khối duy nhất. | **Cực kỳ phức tạp**: Phải giám sát hàng chục, hàng trăm dịch vụ chạy độc lập. Khi xảy ra lỗi, rất khó để tìm ra lỗi bắt nguồn từ dịch vụ nào nếu không có hệ thống Log tập trung (Distributed Tracing). |
+
+---
+
+3. Những rủi ro thực tế khi cố "đu trend" Microservices
+
+Nếu doanh nghiệp cố tình chuyển đổi khi chưa chuẩn bị kỹ, họ sẽ phải đối mặt với các "vết xe đổ" sau:
+
+1. Khủng hoảng nhân sự:** Đội ngũ lập trình viên hiện tại đang quen làm Monolith sẽ bị ngợp trước các khái niệm DevOps, Docker, Kubernetes, API Gateway... Hệ quả là năng suất giảm và sản phẩm trì trệ.
+2. Chi phí hạ tầng tăng vọt:** Thay vì thuê 1-2 server lớn chạy Monolith, doanh nghiệp phải trả tiền cho hàng chục server/container nhỏ, chi phí cho các dịch vụ đám mây (Cloud) tăng lên chóng mặt.
+3. Lỗi dữ liệu sai lệch:** Việc giải quyết bài toán giao dịch (Transaction) liên quan đến nhiều dịch vụ (ví dụ: Trừ tiền thành công ở dịch vụ Ví nhưng dịch vụ Kho lại báo hết hàng) cực kỳ đau đầu nếu không có các kiến trúc nâng cao như Saga Pattern.
+4. Tạo ra một đống "Monolith phân tán" (Distributed Monolith):** Code thì chia nhỏ nhưng các dịch vụ lại phụ thuộc chặt chẽ vào nhau (Dịch vụ A chết làm dịch vụ B, C, D chết theo). Đây là thảm họa lớn nhất vì hệ thống vừa chậm vừa khó sửa.
+
+ 4. Kết luận
+Microservices **không phải là "viên đạn bạc"** giải quyết được mọi vấn đề. Nó chỉ phát huy tác dụng khi hệ thống Monolith cũ đã quá lớn, tổ chức của doanh nghiệp đã chia thành nhiều team độc lập và hạ tầng DevOps đã đủ chín muồi. Đối với đa số các doanh nghiệp vừa và nhỏ, việc tối ưu hóa code Monolith (hoặc chuyển sang Modular Monolith) mới là lựa chọn khôn ngoan và tiết kiệm nhất.
