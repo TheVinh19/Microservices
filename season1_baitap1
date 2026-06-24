@@ -1,0 +1,40 @@
+1. Tại sao chọn kiến trúc trước khi bắt đầu dự án lại là bước sống còn?
+Đối với một startup, ranh giới giữa việc "ra mắt sản phẩm nhanh để chiếm lĩnh thị trường" và "xây dựng một hệ thống bền vững" luôn là một bài toán đau đầu. Tuy nhiên, việc định hình và lựa chọn kiến trúc phần mềm ngay từ đầu là bước đi sống còn vì những lý do sau:
+
+Định hình khung xương cho hệ thống: Kiến trúc phần mềm giống như bản thiết kế móng nhà. Nếu móng không vững hoặc không đúng mục đích, việc xây thêm tầng sau này là bất khả thi.
+
+Tránh bẫy chi phí "Đập đi xây lại": Nếu chọn sai kiến trúc từ đầu (ví dụ: làm một hệ thống nguyên khối quá rối rắm, không thể tách rời), khi lượng người dùng tăng đột biến, chi phí để sửa chữa, thay đổi hoặc nâng cấp sẽ cực kỳ khủng khiếp. Đối với startup, việc cạn kiệt vốn vì phải làm lại hệ thống từ đầu đồng nghĩa với thất bại.
+
+Tối ưu hóa nguồn lực hạn hẹp: Xác định rõ kiến trúc giúp đội ngũ phát triển (dù là ít người) biết rõ mình cần làm gì, phân chia công việc ra sao, tránh chồng chéo và tối ưu hóa thời gian đưa sản phẩm ra thị trường (Time-to-market).
+
+2. Các loại kiến trúc phần mềm phổ biến
+Tùy thuộc vào giai đoạn và mục tiêu của startup, người tư vấn có thể đề xuất các loại kiến trúc sau:
+
+Kiến trúc nguyên khối (Monolithic Architecture):
+
+Mô tả: Toàn bộ các chức năng của ứng dụng (giao diện, logic xử lý, cơ sở dữ liệu) được gộp chung vào một mã nguồn duy nhất.
+
+Áp dụng: Rất phù hợp cho startup ở giai đoạn đầu (MVP - sản phẩm khả dụng tối thiểu) vì dễ triển khai nhanh, chi phí thấp và dễ kiểm tra tính năng.
+
+Kiến trúc vi dịch vụ (Microservices Architecture):
+
+Mô tả: Hệ thống được chia nhỏ thành nhiều dịch vụ độc lập, mỗi dịch vụ đảm nhận một chức năng riêng biệt (ví dụ: dịch vụ thanh toán, dịch vụ quản lý người dùng) và giao tiếp với nhau qua API.
+
+Áp dụng: Phù hợp khi startup đã tăng trưởng mạnh, hệ thống lớn, cần nâng cấp hoặc mở rộng riêng lẻ từng phần mà không làm ảnh hưởng đến toàn bộ hệ thống.
+
+Kiến trúc phân tầng (Layered / N-Tier Architecture):
+
+Mô tả: Mã nguồn được chia thành các tầng có nhiệm vụ riêng biệt (thường là Presentation Layer - giao diện, Business Layer - logic xử lý, và Data Layer - dữ liệu).
+
+Áp dụng: Giúp cấu trúc code rõ ràng, dễ bảo trì, thích hợp cho các ứng dụng quản lý, doanh nghiệp từ vừa đến lớn.
+
+3. Các thuộc tính chất lượng (Quality Attributes) của phần mềm
+Một kiến trúc tốt không chỉ giúp phần mềm chạy được, mà phải đáp ứng được các tiêu chuẩn chất lượng (Non-functional requirements) sau:
+
+Scalability (Khả năng mở rộng): Hệ thống có khả năng chịu tải tốt khi lượng người dùng hoặc lượng dữ liệu tăng lên đột biến (bằng cách nâng cấp máy chủ hoặc chia tải) mà không làm sập ứng dụng.
+
+Availability (Độ sẵn sàng): Tỷ lệ thời gian hệ thống hoạt động bình thường, không bị gián đoạn hay "chết" web. Đối với startup, hệ thống luôn sẵn sàng nghĩa là không bỏ lỡ khách hàng tiềm năng.
+
+Maintainability (Khả năng bảo trì): Code được tổ chức sạch sẽ, rõ ràng để khi có lỗi xảy ra hoặc khi cần thêm tính năng mới, các lập trình viên có thể thực hiện một cách dễ dàng, nhanh chóng mà không phá vỡ các tính năng cũ.
+
+Security (Tính bảo mật): Khả năng bảo vệ thông tin người dùng và dữ liệu hệ thống trước các cuộc tấn công mạng, rò rỉ dữ liệu.
