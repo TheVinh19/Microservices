@@ -1,0 +1,26 @@
+1. Bối cảnh dự án & Vấn đề "Big Ball of Mud"
+Khi một hệ thống phát triển theo thời gian mà không có một ranh giới rõ ràng, mã nguồn sẽ dần rơi vào trạng thái "Big Ball of Mud" (Một đống bùn lầy). Khối lượng code phình to, các logic nghiệp vụ (business logic) bị trộn lẫn với technical logic (như kết nối DB, cấu hình mạng), và một thay đổi nhỏ ở mô-đun này có thể làm sập toàn bộ hệ thống [|cite: user_context]. Đề xuất áp dụng DDD của Team Leader là một bước đi chiến lược nhằm dịch chuyển trọng tâm từ "kỹ thuật thuần túy" sang "nghiệp vụ cốt lõi" [|cite: user_context].
+
+2. Phân tích Ưu điểm của Domain-Driven Design (DDD)
+Sự gắn kết chặt chẽ giữa Nghiệp vụ và Code (Core Logic làm trung tâm):
+Thay vì tư duy lập trình kiểu cũ — lao vào thiết kế Database và phân tầng kỹ thuật trước [|cite: user_context] — DDD đặt "trái tim" của phần mềm vào việc giải quyết nghiệp vụ thực tế [|cite: user_context]. Code viết ra phản ánh chính xác quy trình vận hành của doanh nghiệp [|cite: user_context]. Nhờ đó, khi luồng công việc của doanh nghiệp thay đổi, nhà phát triển biết chính xác vùng code nào cần cập nhật mà không làm ảnh hưởng tới các phần khác [|cite: user_context].
+
+Ngôn ngữ chung (Ubiquitous Language):
+Đây là cầu nối xóa bỏ khoảng cách giữa đội ngũ chuyên gia nghiệp vụ (Business Experts/Khách hàng) và đội ngũ phát triển (Developers) [|cite: user_context]. Tất cả các bên thống nhất sử dụng một tập hợp thuật ngữ duy nhất từ tài liệu đặc tả cho đến tên hàm, tên biến trong code [|cite: user_context]. Ví dụ, thay vì đặt tên hàm kỹ thuật mơ hồ như updateStatus(), code sẽ sử dụng chính xác từ ngữ nghiệp vụ là changeInventory() cho hành động "Xả kho" [|cite: user_context].
+
+Phân rã ngữ cảnh rõ ràng (Bounded Context):
+DDD giúp bẻ gãy "đống bùn lầy" thành các mô-đun độc lập có ranh giới rõ ràng [|cite: user_context]. Một đối tượng (như Sản phẩm) sẽ được định nghĩa lại một cách tinh gọn, chỉ giữ lại những thuộc tính thực sự cần thiết trong ngữ cảnh đó (Ví dụ: Ngữ cảnh Bán hàng chỉ cần Giá/Hình ảnh, còn ngữ cảnh Kho vận chỉ cần Cân nặng/Kích thước) [|cite: user_context]. Điều này tạo tiền đề hoàn hảo để chuyển đổi sang kiến trúc Microservices [|cite: user_context].
+
+3. Phân tích Nhược điểm và Khó khăn khi áp dụng
+Đường cong học tập (Learning Curve) cao:
+DDD không phải là một framework có sẵn công thức gõ lệnh, mà là một tư duy thiết kế phức tạp. Đội ngũ phát triển phải thay đổi hoàn toàn thói quen "tư duy theo hướng database" sang "tư duy theo hướng nghiệp vụ" [|cite: user_context]. Việc hiểu và áp dụng đúng các khái niệm như Aggregate Root, Value Object, Bounded Context đòi hỏi thời gian và kinh nghiệm dày dặn.
+
+Tốn thời gian hội thảo nghiệp vụ (Event Storming/Workshops):
+Để xây dựng được Ngôn ngữ chung và Ranh giới ngữ cảnh, Developers và Business Analysts bắt buộc phải ngồi lại với nhau qua rất nhiều buổi thảo luận chuyên sâu. Nếu chuyên gia nghiệp vụ không hợp tác hoặc không diễn đạt rõ ràng quy trình, việc thiết kế Domain sẽ bị sai lệch ngay từ đầu.
+
+Dư thừa và trùng lặp dữ liệu (Trade-off hình dạng DB):
+Khi chia nhỏ thành các Bounded Context để phục vụ Microservices, chúng ta bắt buộc phải chấp nhận việc lặp lại thông tin giữa các cơ sở dữ liệu độc lập nhằm tối ưu tốc độ truy xuất [|cite: user_context]. Điều này làm tăng dung lượng lưu trữ và đòi hỏi các kỹ thuật đồng bộ dữ liệu phức tạp hơn so với cơ sở dữ liệu quan hệ đồng nhất của kiến trúc Monolithic [|cite: user_context].
+4. Kết luận & Kết quả mong muốn
+Cốt lõi: Domain-Driven Design (DDD) giúp chúng ta nhận ra rằng: Phần mềm thành công không phải vì nó có kỹ thuật tối tân nhất, mà vì nó giải quyết đúng và trúng bài toán kinh doanh của doanh nghiệp.
+
+Khi áp dụng DDD, mã nguồn của bạn sẽ chuyển dịch từ một khối hỗn độn thành các cấu trúc mô-đun hóa sạch sẽ (Clean Code), giúp hệ thống có khả năng mở rộng (Scale) linh hoạt và thích ứng nhanh chóng với các thay đổi của thị trường [|cite: user_context].
