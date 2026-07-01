@@ -1,0 +1,6 @@
+BÀI PHÂN TÍCH: PHÂN NHÓM MODULE SHOPEE THEO SUB-DOMAIN
+BẢNG TỔNG HỢP CHIẾN LƯỢC ĐẦU TƯ
+Sub-domain            Mức độ ưu tiên nguồn lực            Chiến lược triển khai
+Core Domain           Tối cao (Hạng Nhất)                 Tự phát triển 100%, liên tục tối ưu bằng Core Team giỏi nhất.
+Supporting Domain     Trung bình (Hạng Hai)               Tự xây dựng ở mức tinh gọn, đủ dùng, có thể outsource một phần.
+Generic Domain        Thấp nhất (Hạng Ba)                 Mua gói dịch vụ sẵn có (SaaS) hoặc xài thư viện Open Source uy tín.
