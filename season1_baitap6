@@ -1,0 +1,47 @@
+BÀI LÀM: KIẾN TRÚC HÓA MẠNG XÃ HỘI TIKTOK
+PHẦN 1: PHÂN TÁCH THEO BUSINESS CAPABILITY (KHẢ NĂNG KINH DOANH)
+Phương pháp này tiếp cận theo hướng Top-Down, chia hệ thống thành các đơn vị chức năng nghiệp vụ độc lập từ góc độ vận hành doanh nghiệp.
+
+    1. Video Service (Dịch vụ Video): Đảm nhận toàn bộ khả năng xử lý vòng đời video: tải lên (upload), lưu trữ luồng dữ liệu, phân phối streaming, xử lý dữ liệu metadata của video, danh sách hashtag và mô tả.
+
+    2. User & Relation Service (Dịch vụ Người dùng & Mối quan hệ): Quản lý hồ sơ người dùng (profile), xác thực tài khoản, và quan trọng nhất là mạng lưới đồ thị mối quan hệ (Follow/Unfollow, danh sách bạn bè) với lượng truy cập đọc/ghi cực kỳ lớn.
+
+    3. Interaction Service (Dịch vụ Tương tác): Quản lý các hành vi tương tác thời gian thực của người dùng trên video bao gồm: Thả tim (Like), Bình luận (Comment), Chia sẻ (Share) và Thêm vào mục yêu thích.
+
+    4. Live Streaming Service (Dịch vụ Phát trực tiếp): Vận hành phòng live, quản lý luồng livestream thời gian thực, tính năng tương tác trong live (tặng quà/gift, comment live, PK giữa các creator).
+
+    5. Advertising & Creator Commerce Service (Dịch vụ Quảng cáo & Thương mại sáng tạo): Hệ thống phân phối quảng cáo hiển thị (TikTok Ads), quản lý doanh thu, ví của nhà sáng tạo, và tích hợp tiếp thị liên kết (TikTok Shop Affiliate) [|cite: user_context].
+
+PHẦN 2: PHÂN TÁCH THEO SUB-DOMAIN (TƯ DUY CHIẾN LƯỢC DDD)
+Phương pháp này phân rã hệ thống dựa trên tính chất và giá trị chiến lược cạnh tranh của từng nghiệp vụ để tối ưu hóa nguồn lực đầu tư.
+
+    1. Core Domain (Miền cốt lõi - Vũ khí cạnh tranh độc quyền):
+
+For You Algorithm Service (Thuật toán Gợi ý xu hướng): Bộ não AI/ML thu thập hành vi người dùng theo từng mili-giây (thời gian xem, tỷ lệ bỏ qua) để cá nhân hóa bảng tin. Đây là Core Domain tối cao tạo nên sự thành công mang tính gây nghiện của TikTok.
+
+Real-time Data Analytics Service (Phân tích dữ liệu thời gian thực): Xử lý hàng tỷ sự kiện dữ liệu (events) mỗi ngày để cập nhật xu hướng (Trending Tracker) ngay lập tức.
+
+    2. Supporting Domain (Miền hỗ trợ - Cần thiết, đặc thù nhưng không phải vũ khí chính):
+
+Comment & Like Processing Service (Xử lý Tương tác): Các tính năng cơ bản giúp người dùng kết nối. Cần khả năng chịu tải (Scalability) rất cao nhưng logic nghiệp vụ không quá phức tạp.
+
+Music & Audio Copyright Library (Thư viện Âm thanh & Bản quyền): Quản lý kho nhạc nền, hiệu ứng âm thanh và đối soát bản quyền âm nhạc — một phần không thể thiếu của các video ngắn TikTok.
+
+    3. Generic Domain (Miền phổ thông - Tiêu chuẩn chung, có thể dùng giải pháp ngoài/thư viện):
+
+Video Transcoding Service (Mã hóa Video): Chuyển đổi video gốc do người dùng tải lên thành nhiều định dạng, độ phân giải khác nhau để tối ưu streaming trên mọi thiết bị và băng thông mạng. Đây là tác vụ thuần kỹ thuật hạ tầng, có thể tối ưu bằng các công nghệ nén mã nguồn mở hoặc dịch vụ Cloud có sẵn.
+
+Notification & Messaging Infrastructure (Hạ tầng Thông báo & Nhắn tin): Hệ thống gửi thông báo đẩy (Push Notification) và tính năng nhắn tin riêng tư (Direct Message). Hoàn toàn có thể dùng các giao thức chuẩn (WebSocket, gRPC) và hạ tầng có sẵn.
+
+PHẦN 3: SO SÁNH & ĐÁNH GIÁ: CÁCH CHIA NÀO GIÚP TEAM PHÁT TRIỂN NHANH HƠN?
+Để trả lời câu hỏi "Cách chia nào giúp team phát triển nhanh hơn?", chúng ta cần xem xét quy mô và giai đoạn của đội ngũ phát triển:
+
+    1. Chọn Business Capability khi: Dự án ở giai đoạn đầu hoặc quy mô Team vừa và nhỏ
+Lý do: Cách chia này trực quan, bám sát các tính năng hiển thị trên Product UI. Mỗi "nhóm tính năng" có thể giao trọn gói cho một Feature Team (ví dụ: Team Video, Team Tương tác) quản lý từ đầu đến cuối (End-to-End).
+
+Kết quả: Giúp tăng tốc độ bàn giao tính năng ban đầu (Time-to-Market) cực kỳ nhanh vì ranh giới công việc được phân chia theo màn hình ứng dụng, giảm thiểu sự phụ thuộc chéo về mặt giao diện.
+
+    2. Chọn Sub-domain (DDD) khi: Hệ thống ở quy mô lớn (High Traffic), lượng dữ liệu khổng lồ và Team đông nhân sự
+Lý do: Cách chia này đi sâu vào bản chất hạ tầng hệ thống và mô hình dữ liệu. Nó giúp tách biệt các phần cực kỳ nặng và đòi hỏi công nghệ cao (như Thuật toán gợi ý - Core) ra khỏi các phần thuần kỹ thuật lặp đi lặp lại (như Mã hóa video - Generic).
+
+Kết quả: Giúp phát triển nhanh và bền vững nhất ở quy mô lớn. Team chuyên gia AI chỉ cần tập trung 100% năng lực vào tối ưu thuật toán For You mà không bị phân tâm bởi lỗi giao diện hay logic của phần comment/like. Các tác vụ Generic có thể sử dụng thư viện/dịch vụ ngoài để giải phóng hoàn toàn nguồn lực cho team.
