@@ -1,0 +1,55 @@
+BÀI LÀM: PHÂN RÃ CÁC MODULE CHÍNH CỦA SHOPEE THEO BUSINESS CAPABILITY
+
+1. Identity & User Management Service (Quản lý Định danh & Người dùng)
+Trách nhiệm chính:
+
+Quản lý toàn bộ vòng đời tài khoản của các đối tượng trong hệ sinh thái (Người mua, Người bán, Tài xế ShopeeFood/Shopee Express, Quản trị viên).
+
+Chịu trách nhiệm xác thực (Authentication - Đăng nhập, Đăng ký, OTP, Biometrics) và phân quyền hệ thống (Authorization).
+
+Quản lý thông tin hồ sơ (Profile) cá nhân và danh sách địa chỉ nhận hàng của người dùng.
+
+2. Product & Catalog Management Service (Quản lý Sản phẩm & Danh mục)
+Trách nhiệm chính:
+
+Quản lý danh mục ngành hàng (Categories), thuộc tính sản phẩm và các biến thể (Màu sắc, kích cỡ, SKU).
+
+Hỗ trợ Người bán (Seller) đăng tải, cập nhật hình ảnh, video và chỉnh sửa thông tin sản phẩm.
+
+Cung cấp dữ liệu sản phẩm sạch, tối ưu cho bộ máy tìm kiếm (Search) và hệ thống gợi ý (Recommendation) trên trang chủ Shopee.
+
+3. Order Management Service (Quản lý Đơn hàng)
+Trách nhiệm chính:
+
+Tiếp nhận yêu cầu mua hàng từ giỏ hàng, tính toán tổng giá trị tạm tính và tạo lập đơn hàng mới.
+
+Quản lý luồng vòng đời và trạng thái của đơn hàng (Chờ thanh toán, Đã thanh toán, Đang giao, Đã giao, Hủy đơn).
+
+Lưu vết thông tin sản phẩm, giá cả và thông tin người mua tại đúng thời điểm chốt đơn để phục vụ tra cứu lịch sử (không bị ảnh hưởng nếu người bán đổi giá sản phẩm sau đó).
+
+4. Payment Service (Quản lý Thanh toán)
+Trách nhiệm chính:
+
+Tích hợp và xử lý giao dịch qua các cổng thanh toán đa dạng (Ví điện tử ShopeePay, Thẻ tín dụng/ghi nợ, Ngân hàng liên kết, Trả sau SPayLater, và Thanh toán khi nhận hàng COD).
+
+Đảm bảo tính an toàn bảo mật giao dịch, quản lý số dư ví, thực hiện cơ chế dòng tiền tạm giữ (Shopee Guarantee - chỉ chuyển tiền cho người bán khi người mua xác nhận đã nhận hàng thành công).
+
+Xử lý hoàn tiền (Refund) khi phát sinh yêu cầu trả hàng từ người mua.
+
+5. Shipping & Logistics Service (Quản lý Vận chuyển & Kho vận)
+Trách nhiệm chính:
+
+Tính toán phí vận chuyển tự động dựa trên khoảng cách địa lý, kích thước và cân nặng của gói hàng từ kho người bán tới người mua.
+
+Kết nối và đẩy thông tin vận đơn sang các đơn vị vận chuyển (Shopee Express, GHTK, GHN, J&T...).
+
+Cung cấp tính năng theo dõi hành trình đơn hàng theo thời gian thực (Real-time Tracking) để người mua chủ động kiểm tra vị trí bưu kiện.
+
+6. Marketing & Promotion Service (Quản lý Khuyến mãi & Chiến dịch)
+Trách nhiệm chính:
+
+Quản lý hệ thống mã giảm giá (Voucher Toàn sàn, Voucher của Shop, Mã miễn phí vận chuyển).
+
+Vận hành các chương trình khuyến mãi quy mô lớn như Flash Sale theo khung giờ, các chiến dịch Mega Sale (9.9, 11.11, 12.12), tích điểm đổi xu (Shopee Xu) và các minigame đổi thưởng.
+
+Kiểm soát điều kiện áp dụng khuyến mãi (Ví dụ: Đơn tối thiểu từ x đồng, giới hạn lượt sử dụng trên mỗi tài khoản) nhằm ngăn chặn hành vi trục lợi.
