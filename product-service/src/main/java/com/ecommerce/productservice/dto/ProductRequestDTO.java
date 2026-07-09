@@ -1,22 +1,23 @@
-package com.ecommerce.productservice.entity;
+package com.ecommerce.productservice.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "products")
-public class Product {
+public class ProductRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @NotBlank(message = "Name cannot be blank")
     private String name;
+
+    @NotNull(message = "Price cannot be null")
+    @Min(value = 1, message = "Price must be at least 1")
     private Double price;
+
+    @NotNull(message = "Stock quantity cannot be null")
+    @Min(value = 0, message = "Stock quantity must be at least 0")
     private Integer stockQuantity;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public Double getPrice() { return price; }
