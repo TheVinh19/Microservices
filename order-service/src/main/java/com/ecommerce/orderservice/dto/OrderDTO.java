@@ -1,22 +1,21 @@
-package com.ecommerce.orderservice.entity;
+package com.ecommerce.orderservice.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "orders")
-public class Order {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class OrderDTO {
+    
     private Long id;
-
     private Long studentId;
-    
     private Long courseId;
-    
     private Double totalAmount;
 
-    // Getters and setters
+    public OrderDTO() {}
+
+    public OrderDTO(Long id, Long studentId, Long courseId, Double totalAmount) {
+        this.id = id;
+        this.studentId = studentId;
+        this.courseId = courseId;
+        this.totalAmount = totalAmount;
+    }
+
     public Long getId() {
         return id;
     }
