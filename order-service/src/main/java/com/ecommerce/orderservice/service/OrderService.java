@@ -6,16 +6,22 @@ import com.ecommerce.orderservice.dto.OrderDTO;
 import com.ecommerce.orderservice.dto.OrderRequestDTO;
 import com.ecommerce.orderservice.entity.Order;
 import com.ecommerce.orderservice.exception.ResourceNotFoundException;
+import com.ecommerce.orderservice.exception.ServiceUnavailableException;
 import com.ecommerce.orderservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
 @Service
 public class OrderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -34,6 +40,9 @@ public class OrderService {
             restTemplate.getForObject("http://localhost:8081/api/v1/customers/" + request.getCustomerId(), ExternalCustomerDTO.class);
         } catch (HttpClientErrorException.NotFound e) {
             throw new ResourceNotFoundException("Customer with ID " + request.getCustomerId() + " not found!");
+        } catch (RestClientException e) {
+            logger.error("Error connecting to Customer Service: {}", e.getMessage());
+            throw new ServiceUnavailableException("Dịch vụ khách hàng hiện không khả dụng, vui lòng thử lại sau.");
         }
 
         // 2. Call product-service
@@ -42,6 +51,9 @@ public class OrderService {
             product = restTemplate.getForObject("http://localhost:8082/api/v1/products/" + request.getProductId(), ExternalProductDTO.class);
         } catch (HttpClientErrorException.NotFound e) {
             throw new ResourceNotFoundException("Product with ID " + request.getProductId() + " not found!");
+        } catch (RestClientException e) {
+            logger.error("Error connecting to Product Service: {}", e.getMessage());
+            throw new ServiceUnavailableException("Dịch vụ sản phẩm hiện không khả dụng, vui lòng thử lại sau.");
         }
 
         // 3. Calculate total
