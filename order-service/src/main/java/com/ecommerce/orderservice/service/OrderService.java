@@ -51,21 +51,22 @@ public class OrderService {
         Order order = new Order();
         order.setCustomerId(request.getCustomerId());
         order.setProductId(request.getProductId());
-        order.setQuantity(request.getQuantity());
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(totalAmount);
-        order.setStatus("CREATED");
         
-        Order savedOrder = orderRepository.save(order);
+        Order savedOrder;
+        try {
+            savedOrder = orderRepository.save(order);
+        } catch (Exception e) {
+            throw new RuntimeException("Database error: Could not save order", e);
+        }
 
         return new OrderDTO(
                 savedOrder.getId(),
                 savedOrder.getCustomerId(),
                 savedOrder.getProductId(),
-                savedOrder.getQuantity(),
                 savedOrder.getOrderDate(),
-                savedOrder.getTotalAmount(),
-                savedOrder.getStatus()
+                savedOrder.getTotalAmount()
         );
     }
 }

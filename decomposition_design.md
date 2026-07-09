@@ -4,7 +4,7 @@
 Hệ thống E-commerce đã được tách từ kiến trúc Monolithic (tất cả trong một project `order-service`) thành 3 Microservices độc lập để đảm bảo Single Responsibility Principle (SRP) và dễ dàng scale (mở rộng) trong tương lai:
 1. **customer-service (Port 8081)**: Quản lý thông tin khách hàng.
 2. **product-service (Port 8082)**: Quản lý thông tin sản phẩm, giá cả và tồn kho.
-3. **order-service (Port 8080)**: Quản lý giao dịch mua hàng.
+3. **order-service (Port 8083)**: Quản lý giao dịch mua hàng.
 
 ---
 
@@ -36,16 +36,14 @@ Hệ thống E-commerce đã được tách từ kiến trúc Monolithic (tất 
   - `id` (Long, PK)
   - `customerId` (Long) - **Foreign Key (Logical)**
   - `productId` (Long) - **Foreign Key (Logical)**
-  - `quantity` (Integer)
   - `orderDate` (LocalDateTime)
   - `totalAmount` (Double)
-  - `status` (String)
 - **Database**: `order_db`
 - **Lưu ý**: Order Service sử dụng `ExternalCustomerDTO` và `ExternalProductDTO` để hứng dữ liệu giao tiếp thông qua HTTP API (sử dụng `RestTemplate`) chứ không chứa entity domain của các service khác.
 
 ---
 
-## 3. Tại sao Order chỉ lưu `customerId` mà không lưu cả đối tượng `Customer`?
+## 3. Tại sao không sử dụng liên kết @JoinColumn (khóa ngoại vật lý) giữa Order và Customer/Product?
 
 Trong kiến trúc Microservices, việc thiết kế dữ liệu giữa các domain phải thỏa mãn tính **Lỏng lẻo (Loosely Coupled)** và **Độc lập (Independent)**. Lý do chính bao gồm:
 
