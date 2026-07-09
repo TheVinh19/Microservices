@@ -10,18 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+    private final com.ecommerce.orderservice.repository.ProductRepository productRepository;
+
+    public ProductController(com.ecommerce.orderservice.repository.ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @GetMapping("/{id}")
     public ProductResponseDTO getProduct(@PathVariable Long id) {
-        // Giả lập lấy dữ liệu Entity từ DB
-        ProductEntity entity = new ProductEntity(
-                id,
-                "Sản phẩm mẫu",
-                "SKU-123",
-                100.0,   // importPrice (nhạy cảm)
-                150.0,   // sellPrice
-                50       // stockQuantity (nhạy cảm)
-        );
+        // Lấy dữ liệu Entity từ DB
+        ProductEntity entity = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
 
         // Map Entity sang DTO để chỉ trả về các thông tin cần thiết
         ProductResponseDTO responseDTO = new ProductResponseDTO(
