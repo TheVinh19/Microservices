@@ -1,28 +1,24 @@
 package com.ecommerce.orderservice.dto;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 
 public class OrderRequestDTO {
     
-    @NotNull(message = "Student ID cannot be null")
-    private Long studentId;
+    @NotNull(message = "Customer ID cannot be null")
+    private Long customerId;
     
-    @NotNull(message = "Course ID cannot be null")
-    private Long courseId;
+    @NotNull(message = "Product ID cannot be null")
+    private Long productId;
 
-    public Long getStudentId() {
-        return studentId;
-    }
+    @NotNull(message = "Quantity cannot be null")
+    @Min(value = 1, message = "Quantity must be at least 1")
+    private Integer quantity;
 
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
-
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
-    }
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
+    public Long getProductId() { return productId; }
+    public void setProductId(Long productId) { this.productId = productId; }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 }

@@ -1,14 +1,18 @@
 package com.ecommerce.orderservice.service;
 
+import com.ecommerce.orderservice.dto.ExternalCustomerDTO;
+import com.ecommerce.orderservice.dto.ExternalProductDTO;
 import com.ecommerce.orderservice.dto.OrderDTO;
 import com.ecommerce.orderservice.dto.OrderRequestDTO;
 import com.ecommerce.orderservice.entity.Order;
-import com.ecommerce.orderservice.entity.ProductEntity;
 import com.ecommerce.orderservice.exception.ResourceNotFoundException;
 import com.ecommerce.orderservice.repository.OrderRepository;
-import com.ecommerce.orderservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
+
+import java.time.LocalDateTime;
 
 @Service
 public class OrderService {
@@ -17,35 +21,51 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private RestTemplate restTemplate;
 
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order với ID " + id + " không tồn tại trên hệ thống!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order with ID " + id + " not found"));
     }
 
     public OrderDTO createOrder(OrderRequestDTO request) {
-        // 1. Kiểm tra khóa học tồn tại không (dùng ProductEntity thay cho Course)
-        ProductEntity course = productRepository.findById(request.getCourseId())
-                .orElseThrow(() -> new ResourceNotFoundException("Khóa học với ID " + request.getCourseId() + " không tồn tại!"));
+        // 1. Call customer-service
+        try {
+            restTemplate.getForObject("http://localhost:8081/api/v1/customers/" + request.getCustomerId(), ExternalCustomerDTO.class);
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new ResourceNotFoundException("Customer with ID " + request.getCustomerId() + " not found!");
+        }
 
-        // 2. Tính tổng tiền (lấy từ sellPrice)
-        Double totalAmount = course.getSellPrice();
+        // 2. Call product-service
+        ExternalProductDTO product;
+        try {
+            product = restTemplate.getForObject("http://localhost:8082/api/v1/products/" + request.getProductId(), ExternalProductDTO.class);
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new ResourceNotFoundException("Product with ID " + request.getProductId() + " not found!");
+        }
 
-        // 3. Lưu vào DB
+        // 3. Calculate total
+        Double totalAmount = product.getPrice() * request.getQuantity();
+
+        // 4. Save Order
         Order order = new Order();
-        order.setStudentId(request.getStudentId());
-        order.setCourseId(request.getCourseId());
+        order.setCustomerId(request.getCustomerId());
+        order.setProductId(request.getProductId());
+        order.setQuantity(request.getQuantity());
+        order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(totalAmount);
+        order.setStatus("CREATED");
         
         Order savedOrder = orderRepository.save(order);
 
-        // 4. Trả về OrderDTO
         return new OrderDTO(
                 savedOrder.getId(),
-                savedOrder.getStudentId(),
-                savedOrder.getCourseId(),
-                savedOrder.getTotalAmount()
+                savedOrder.getCustomerId(),
+                savedOrder.getProductId(),
+                savedOrder.getQuantity(),
+                savedOrder.getOrderDate(),
+                savedOrder.getTotalAmount(),
+                savedOrder.getStatus()
         );
     }
 }
